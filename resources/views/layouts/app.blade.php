@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'TRASPAC Employee Management') }}</title>
+    <title>{{ config('app.name', 'TRASPAC App') }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
@@ -45,14 +45,28 @@
             width: 42px;
             height: 42px;
             border-radius: 12px;
-            background: linear-gradient(135deg, var(--brand-navy), var(--brand-blue));
+            background: #fff;
             display: grid;
             place-items: center;
+            overflow: hidden;
+            box-shadow: 0 10px 22px rgba(29, 78, 216, .18);
+            flex: 0 0 42px;
+        }
+        .app-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        .app-logo-fallback {
+            display: none;
+            width: 100%;
+            height: 100%;
+            place-items: center;
+            background: linear-gradient(135deg, var(--brand-navy), var(--brand-blue));
             color: #fff;
             font-weight: 800;
             font-size: .92rem;
-            box-shadow: 0 10px 22px rgba(245, 158, 11, .18);
-            flex: 0 0 42px;
         }
         .app-brand-text {
             display: flex;
@@ -87,24 +101,30 @@
             border-right: 1px solid #e5e7eb;
             box-shadow: 10px 0 30px rgba(15, 23, 42, .04);
         }
-        .brand-block {
-            padding: 18px 16px;
-            border-radius: 18px;
-            background: #f8fafc;
-            border: 1px solid #e5e7eb;
-        }
-        .brand-block .text-white-50 {
-            color: #94a3b8 !important;
-        }
         .brand-mark {
             width: 36px;
             height: 36px;
             border-radius: 12px;
             display: grid;
             place-items: center;
-            background: linear-gradient(135deg, #1d4ed8, #14b8a6);
-            box-shadow: 0 12px 24px rgba(0,0,0,.18);
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 12px 24px rgba(29, 78, 216, .18);
             flex: 0 0 36px;
+        }
+        .brand-mark img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+        .brand-mark-fallback {
+            display: none;
+            width: 100%;
+            height: 100%;
+            place-items: center;
+            background: linear-gradient(135deg, #1d4ed8, #14b8a6);
+            color: #fff;
             font-size: .78rem;
             font-weight: 800;
         }
@@ -123,8 +143,8 @@
         }
         .sidebar .nav-link.active {
             color: #0f172a;
-            background: #eef4ff;
-            border: 1px solid #dbe7ff;
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
         }
         .sidebar .section-label {
             color: #94a3b8;
@@ -150,6 +170,12 @@
             color: #0f172a;
             background: #f8fafc;
         }
+        .tree-list a.active {
+            color: #0f172a;
+            background: #dbeafe;
+            border: 1px solid #93c5fd;
+            font-weight: 700;
+        }
         .tree-list a::before {
             content: "";
             width: 6px;
@@ -158,12 +184,15 @@
             background: #94a3b8;
             flex: 0 0 6px;
         }
+        .tree-list a.active::before {
+            background: #1d4ed8;
+        }
         .sidebar .bi {
-            color: #64748b;
+            color: #475569;
         }
         .sidebar .nav-link.active .bi,
         .sidebar .nav-link:hover .bi {
-            color: #1d4ed8;
+            color: #1e40af;
         }
         main .bi {
             font-size: 1rem !important;
@@ -221,19 +250,42 @@
     @stack('styles')
 </head>
 <body>
+@php
+    $traspacLogoSvg = <<<'SVG'
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 213" role="img" aria-label="TRASPAC software company">
+    <rect width="900" height="213" fill="#ffffff"/>
+    <g transform="translate(0, 8)">
+        <text x="18" y="105"
+              font-family="Arial, Helvetica, sans-serif"
+              font-size="98"
+              font-weight="800"
+              letter-spacing="-4"
+              fill="#2f58b8">TRASPAC</text>
+        <text x="181" y="182"
+              font-family="Arial, Helvetica, sans-serif"
+              font-size="64"
+              font-weight="800"
+              fill="#f59e0b">software company</text>
+    </g>
+</svg>
+SVG;
+    $traspacLogoDataUri = 'data:image/svg+xml;charset=UTF-8,' . rawurlencode($traspacLogoSvg);
+@endphp
 <div class="app-shell">
     <header class="app-header">
         <div class="app-brand">
-            <div class="app-logo">TR</div>
+            <div class="app-logo">
+                <img src="{{ $traspacLogoDataUri }}" alt="TRASPAC logo">
+                <div class="app-logo-fallback">TR</div>
+            </div>
             <div class="app-brand-text">
                 <div class="title">TRASPAC App</div>
-                <div class="subtitle">Employee Management</div>
             </div>
         </div>
         <div class="app-user">
-            <form action="{{ route('logout') }}" method="POST" class="m-0">
+            <form action="{{ route('logout') }}" method="POST" class="m-0" id="logoutForm">
                 @csrf
-                <button class="btn btn-outline-secondary rounded-3 fw-semibold px-3">
+                <button type="submit" class="btn btn-outline-secondary rounded-3 fw-semibold px-3" id="logoutButton">
                     Logout
                 </button>
             </form>
@@ -242,24 +294,12 @@
 
     <div class="app-body">
         <aside class="col-lg-2 sidebar p-3 p-xl-4">
-            <div class="brand-block mb-4">
-                <div class="d-flex align-items-center gap-3">
-                    <div class="brand-mark">
-                        TR
-                    </div>
-                    <div>
-                        <div class="fw-bold lh-1">TRASPAC</div>
-                        <div class="small text-white-50">Employee System</div>
-                    </div>
-                </div>
-            </div>
-
             <div class="section-label mb-2">Main Menu</div>
             <nav class="nav flex-column gap-1 mb-4">
                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">
                     <i class="bi bi-speedometer2"></i> Dashboard
                 </a>
-                <a class="nav-link {{ request()->routeIs('pegawai.*') ? 'active' : '' }}" href="{{ route('pegawai.index') }}">
+                <a class="nav-link {{ request()->routeIs('pegawai.*') && !request()->filled('unit_kerja_id') ? 'active' : '' }}" href="{{ route('pegawai.index') }}">
                     <i class="bi bi-people"></i> Pegawai
                 </a>
             </nav>
@@ -269,15 +309,19 @@
                     type="button"
                     data-bs-toggle="collapse"
                     data-bs-target="#unitKerjaMenu"
-                    aria-expanded="false"
+                    aria-expanded="{{ request()->filled('unit_kerja_id') ? 'true' : 'false' }}"
                     aria-controls="unitKerjaMenu">
                 <span class="fw-semibold">Lihat unit kerja</span>
                 <i class="bi bi-chevron-down small"></i>
             </button>
-            <div class="collapse" id="unitKerjaMenu">
+            @php
+                $selectedUnitKerja = $selectedUnitKerja ?? request('unit_kerja_id');
+                $showUnitKerjaMenu = request()->filled('unit_kerja_id') || filled($selectedUnitKerja);
+            @endphp
+            <div class="collapse {{ $showUnitKerjaMenu ? 'show' : '' }}" id="unitKerjaMenu">
                 <div class="tree-list small">
                     @foreach(\App\Models\UnitKerja::orderBy('nama')->get() as $uk)
-                        <a href="{{ route('pegawai.index', ['unit_kerja_id' => $uk->id]) }}">
+                        <a href="{{ route('pegawai.index', ['unit_kerja_id' => $uk->id]) }}" class="{{ (string) $selectedUnitKerja === (string) $uk->id ? 'active' : '' }}">
                             <span>{{ $uk->nama }}</span>
                         </a>
                     @endforeach
@@ -293,9 +337,6 @@
                         @endforeach
                     </ul>
                 </div>
-            @endif
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
             @endif
             @yield('content')
         </main>
@@ -325,6 +366,28 @@
         confirmButtonColor: '#102a43'
     });
     @endif
+
+    const logoutForm = document.getElementById('logoutForm');
+    const logoutButton = document.getElementById('logoutButton');
+    if (logoutForm && logoutButton) {
+        logoutForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            Swal.fire({
+                icon: 'question',
+                title: 'Logout?',
+                text: 'Kamu akan keluar dari aplikasi.',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, logout',
+                cancelButtonText: 'Batal',
+                confirmButtonColor: '#102a43',
+                cancelButtonColor: '#64748b'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    logoutForm.submit();
+                }
+            });
+        });
+    }
 </script>
 @stack('scripts')
 </body>

@@ -3,11 +3,6 @@
 @section('content')
 <div class="pegawai-page">
     <style>
-        .pegawai-page i,
-        .pegawai-page .bi,
-        .pegawai-page svg {
-            display: none !important;
-        }
         .page-hero {
             border-radius: 22px;
             background: linear-gradient(135deg, #0f172a 0%, #102a43 55%, #1d4ed8 100%);
@@ -78,10 +73,14 @@
             letter-spacing: .06em;
             border-bottom: 1px solid #e5ebf2 !important;
             white-space: nowrap;
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
         }
         .table tbody td {
             vertical-align: middle;
             white-space: nowrap;
+            padding-top: 1.1rem;
+            padding-bottom: 1.1rem;
         }
         .soft-pill {
             display: inline-flex;
@@ -94,9 +93,28 @@
             font-weight: 700;
         }
         .action-btn {
-            border-radius: 12px;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+        .action-btn .bi {
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .toolbar-btn {
+            border-radius: 14px;
             font-weight: 700;
-            padding: .45rem .7rem;
+            padding: .75rem 1rem;
+            min-height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: .45rem;
         }
         .icon-dot {
             width: 44px;
@@ -104,8 +122,8 @@
             border-radius: 14px;
             display: grid;
             place-items: center;
-            background: rgba(255,255,255,.12);
-            border: 1px solid rgba(255,255,255,.14);
+            background: rgba(255,255,255,.10);
+            border: 1px solid rgba(255,255,255,.12);
         }
         .toolbar {
             display: flex;
@@ -125,10 +143,10 @@
                 </div>
             </div>
             <div class="toolbar">
-                <a href="{{ route('pegawai.create') }}" class="btn btn-light action-btn">
+                <a href="{{ route('pegawai.create') }}" class="btn btn-light toolbar-btn">
                     Tambah Pegawai
                 </a>
-                <a href="{{ route('pegawai.print', request()->query()) }}" class="btn btn-outline-light action-btn">
+                <a href="{{ route('pegawai.print', request()->query()) }}" class="btn btn-outline-light toolbar-btn">
                     Print
                 </a>
             </div>
@@ -230,11 +248,15 @@
                         <td>{{ $p->no_hp }}</td>
                         <td>{{ $p->npwp }}</td>
                         <td class="text-nowrap">
-                            <a href="{{ route('pegawai.edit', $p) }}" class="btn btn-sm btn-warning action-btn">Edit</a>
+                            <a href="{{ route('pegawai.edit', $p) }}" class="btn btn-sm btn-warning action-btn" aria-label="Edit">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
                             <form action="{{ route('pegawai.destroy', $p) }}" method="POST" class="d-inline form-delete">
                                 @csrf
                                 @method('DELETE')
-                                <button class="btn btn-sm btn-danger action-btn">Hapus</button>
+                                <button class="btn btn-sm btn-danger action-btn" aria-label="Hapus">
+                                    <i class="bi bi-trash-fill"></i>
+                                </button>
                             </form>
                         </td>
                     </tr>

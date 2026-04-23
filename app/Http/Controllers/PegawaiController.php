@@ -43,7 +43,9 @@ class PegawaiController extends Controller
 
     public function create()
     {
-        return view('pegawai.create', $this->formData());
+        return view('pegawai.create', array_merge($this->formData(), [
+            'selectedUnitKerja' => request('unit_kerja_id'),
+        ]));
     }
 
     public function store(PegawaiRequest $request)
@@ -58,7 +60,9 @@ class PegawaiController extends Controller
 
     public function edit(Pegawai $pegawai)
     {
-        return view('pegawai.edit', array_merge($this->formData(), compact('pegawai')));
+        return view('pegawai.edit', array_merge($this->formData(), compact('pegawai'), [
+            'selectedUnitKerja' => $pegawai->unit_kerja_id,
+        ]));
     }
 
     public function update(PegawaiRequest $request, Pegawai $pegawai)
