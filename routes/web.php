@@ -11,7 +11,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware('auth')->group(function () {
     Route::view('/', 'dashboard')->name('dashboard');
-    Route::resource('pegawai', PegawaiController::class)->except(['show']);
+    Route::resource('pegawai', PegawaiController::class);
     Route::get('pegawai-print', [PegawaiController::class, 'print'])->name('pegawai.print');
     Route::get('unit-kerja-tree', [UnitKerjaController::class, 'index'])->name('unit-kerja.tree');
 });

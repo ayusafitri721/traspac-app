@@ -248,6 +248,9 @@
                         <td>{{ $p->no_hp }}</td>
                         <td>{{ $p->npwp }}</td>
                         <td class="text-nowrap">
+                            <a href="{{ route('pegawai.show', $p) }}" class="btn btn-sm btn-info action-btn text-white" aria-label="Detail">
+                                <i class="bi bi-eye-fill"></i>
+                            </a>
                             <a href="{{ route('pegawai.edit', $p) }}" class="btn btn-sm btn-warning action-btn" aria-label="Edit">
                                 <i class="bi bi-pencil-fill"></i>
                             </a>

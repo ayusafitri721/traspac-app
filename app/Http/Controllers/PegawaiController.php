@@ -65,6 +65,13 @@ class PegawaiController extends Controller
         ]));
     }
 
+    public function show(Pegawai $pegawai)
+    {
+        $pegawai->load(['agama', 'golongan', 'eselon', 'jabatan', 'unitKerja']);
+
+        return view('pegawai.show', compact('pegawai'));
+    }
+
     public function update(PegawaiRequest $request, Pegawai $pegawai)
     {
         $data = $request->validated();
