@@ -145,18 +145,22 @@
             border-radius: 12px;
             overflow: hidden;
         }
-        .report-card,
         .report-header,
-        .summary-strip,
-        .summary-box,
-        .table-wrap {
+        .summary-box {
             break-inside: avoid;
             page-break-inside: avoid;
+        }
+        .report-body {
+            padding: 12px 16px 14px;
+        }
+        .summary-strip {
+            margin-bottom: 8px;
         }
         table {
             margin: 0;
             width: 100%;
             table-layout: fixed;
+            border-collapse: collapse;
         }
         thead {
             display: table-header-group;
@@ -172,10 +176,14 @@
             white-space: nowrap;
         }
         tbody td {
-            padding: 8px 10px !important;
+            padding: 6px 8px !important;
             vertical-align: middle;
             border-color: #edf2f7 !important;
-            font-size: .84rem;
+            font-size: .78rem;
+            white-space: normal;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            line-height: 1.15;
         }
         tbody tr:nth-child(even) {
             background: #fbfdff;
@@ -183,6 +191,49 @@
         tbody tr {
             break-inside: avoid;
             page-break-inside: avoid;
+        }
+        th.col-no,
+        td.col-no {
+            width: 4%;
+            text-align: center;
+        }
+        th.col-nip,
+        td.col-nip {
+            width: 9%;
+        }
+        th.col-nama,
+        td.col-nama {
+            width: 13%;
+        }
+        th.col-jabatan,
+        td.col-jabatan {
+            width: 11%;
+        }
+        th.col-unit,
+        td.col-unit {
+            width: 11%;
+        }
+        th.col-tempat,
+        td.col-tempat {
+            width: 12%;
+        }
+        th.col-gender,
+        td.col-gender {
+            width: 5%;
+            text-align: center;
+        }
+        th.col-tgl,
+        td.col-tgl {
+            width: 9%;
+            white-space: nowrap;
+        }
+        th.col-hp,
+        td.col-hp {
+            width: 10%;
+        }
+        th.col-npwp,
+        td.col-npwp {
+            width: 16%;
         }
         .no-print {
             margin-bottom: 14px;
@@ -219,6 +270,8 @@
                 border-radius: 0;
                 box-shadow: none;
                 overflow: visible;
+                break-inside: auto;
+                page-break-inside: auto;
             }
             .report-header {
                 border-radius: 0;
@@ -226,37 +279,47 @@
                 print-color-adjust: exact;
             }
             .report-body {
-                padding-top: 12px;
+                padding-top: 10px;
             }
             .summary-strip {
-                margin-bottom: 10px;
+                margin-bottom: 6px;
             }
             .table-wrap {
                 overflow: visible;
+                border-radius: 0;
+                break-inside: auto;
+                page-break-inside: auto;
             }
             table {
-                font-size: .8rem;
+                font-size: .74rem;
             }
             .summary-value {
-                font-size: .92rem;
+                font-size: .88rem;
             }
             .report-title {
-                margin-bottom: 6px;
+                margin-bottom: 4px;
             }
             .report-description {
-                margin-bottom: 6px;
+                margin-bottom: 4px;
             }
             thead th {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                padding: 8px 8px !important;
+                padding: 6px 6px !important;
+                font-size: .58rem;
+                line-height: 1.1;
             }
             tbody td {
-                padding: 7px 8px !important;
+                padding: 5px 6px !important;
+                font-size: .68rem;
+            }
+            tbody tr {
+                break-inside: avoid;
+                page-break-inside: avoid;
             }
             @page {
                 size: landscape;
-                margin: 6mm;
+                margin: 4mm;
             }
         }
     </style>
@@ -358,31 +421,31 @@ SVG;
                         <table class="table table-bordered table-striped table-sm align-middle">
                             <thead>
                                 <tr>
-                                    <th style="width:4%">No</th>
-                                    <th style="width:9%">NIP</th>
-                                    <th style="width:13%">Nama</th>
-                                    <th style="width:10%">Jabatan</th>
-                                    <th style="width:11%">Unit Kerja</th>
-                                    <th style="width:9%">Tempat Tugas</th>
-                                    <th style="width:7%">L/P</th>
-                                    <th style="width:9%">Tgl Lahir</th>
-                                    <th style="width:10%">No HP</th>
-                                    <th style="width:18%">NPWP</th>
+                                    <th class="col-no">No</th>
+                                    <th class="col-nip">NIP</th>
+                                    <th class="col-nama">Nama</th>
+                                    <th class="col-jabatan">Jabatan</th>
+                                    <th class="col-unit">Unit Kerja</th>
+                                    <th class="col-tempat">Tempat Tugas</th>
+                                    <th class="col-gender">L/P</th>
+                                    <th class="col-tgl">Tgl Lahir</th>
+                                    <th class="col-hp">No HP</th>
+                                    <th class="col-npwp">NPWP</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @forelse($pegawai as $i => $p)
                                 <tr>
-                                    <td>{{ $i + 1 }}</td>
-                                    <td class="fw-semibold">{{ $p->nip }}</td>
-                                    <td>{{ $p->nama }}</td>
-                                    <td>{{ $p->jabatan?->nama }}</td>
-                                    <td>{{ $p->unitKerja?->nama }}</td>
-                                    <td>{{ $p->tempat_tugas }}</td>
-                                    <td>{{ $p->jenis_kelamin }}</td>
-                                    <td>{{ $p->tgl_lahir?->format('d-m-Y') }}</td>
-                                    <td>{{ $p->no_hp }}</td>
-                                    <td>{{ $p->npwp }}</td>
+                                    <td class="col-no">{{ $i + 1 }}</td>
+                                    <td class="col-nip fw-semibold">{{ $p->nip }}</td>
+                                    <td class="col-nama">{{ $p->nama }}</td>
+                                    <td class="col-jabatan">{{ $p->jabatan?->nama }}</td>
+                                    <td class="col-unit">{{ $p->unitKerja?->nama }}</td>
+                                    <td class="col-tempat">{{ $p->tempat_tugas }}</td>
+                                    <td class="col-gender">{{ $p->jenis_kelamin }}</td>
+                                    <td class="col-tgl">{{ $p->tgl_lahir?->format('d-m-Y') }}</td>
+                                    <td class="col-hp">{{ $p->no_hp }}</td>
+                                    <td class="col-npwp">{{ $p->npwp }}</td>
                                 </tr>
                                 @empty
                                 <tr>
